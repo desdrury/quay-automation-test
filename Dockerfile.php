@@ -1,6 +1,3 @@
-ARG CLI_IMAGE
-FROM ${CLI_IMAGE:-builder} as builder
-
 FROM amazeeio/php:7.1-fpm
 
 # Add ClamAV.
@@ -16,4 +13,3 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini \
     rm -rf /blackfire
 
-COPY --from=builder /app /app
