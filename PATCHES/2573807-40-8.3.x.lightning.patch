@@ -1,0 +1,123 @@
+diff -ruN docroot_orig/core/modules/page_cache/src/Tests/PageCacheStoreResponseTest.php docroot/core/modules/page_cache/src/Tests/PageCacheStoreResponseTest.php
+--- docroot_orig/core/modules/page_cache/src/Tests/PageCacheStoreResponseTest.php	1970-01-01 10:00:00.000000000 +1000
++++ docroot/core/modules/page_cache/src/Tests/PageCacheStoreResponseTest.php	2017-11-06 11:39:29.997888326 +1100
+@@ -0,0 +1,119 @@
++<?php
++
++namespace Drupal\page_cache\Tests;
++
++use Drupal\Core\Cache\CacheBackendInterface;
++use Drupal\Core\Cache\CacheableResponse;
++use Drupal\Core\PageCache\RequestPolicyInterface;
++use Drupal\Core\PageCache\ResponsePolicyInterface;
++use Drupal\Tests\UnitTestCase;
++use Drupal\page_cache\StackMiddleware\PageCache;
++use Symfony\Component\HttpFoundation\Request;
++use Symfony\Component\HttpKernel\HttpKernelInterface;
++
++/**
++ * @coversDefaultClass \Drupal\page_cache\StackMiddleware\PageCache
++ * @group page_cache
++ */
++class PageCacheStoreResponseTest extends UnitTestCase {
++
++  /**
++   * The cache backend used in the test.
++   *
++   * @var \Drupal\Core\Cache\CacheBackendInterface|\PHPUnit_Framework_MockObject_MockObject
++   */
++  protected $cache;
++
++  /**
++   * The mocked HTTP kernel.
++   *
++   * @var \Symfony\Component\HttpKernel\HttpKernelInterface|PHPUnit_Framework_MockObject_MockObject
++   */
++  protected $kernel;
++
++  /**
++   * The accessible reflection of the tested protected method.
++   *
++   * @var \ReflectionMethod
++   */
++  protected $method;
++
++  /**
++   * The mocked request policy.
++   *
++   * @var \Drupal\Core\PageCache\RequestPolicyInterface|PHPUnit_Framework_MockObject_MockObject
++   */
++  protected $requestPolicy;
++
++  /**
++   * The mocked response policy.
++   *
++   * @var \Drupal\Core\PageCache\ResponsePolicyInterface|PHPUnit_Framework_MockObject_MockObject
++   */
++  protected $responsePolicy;
++
++  /**
++   * The tested page cache middleware.
++   *
++   * @var \Drupal\page_cache\StackMiddleware\PageCache
++   */
++  protected $pageCache;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp() {
++    $this->cache = $this->getMock(CacheBackendInterface::class);
++    $this->kernel = $this->getMock(HttpKernelInterface::class);
++    $this->requestPolicy = $this->getMock(RequestPolicyInterface::class);
++    $this->responsePolicy = $this->getMock(ResponsePolicyInterface::class);
++
++    $this->pageCache = new PageCache(
++      $this->kernel,
++      $this->cache,
++      $this->requestPolicy,
++      $this->responsePolicy
++    );
++
++    $this->method = new \ReflectionMethod(PageCache::class, 'storeResponse');
++    $this->method->setAccessible(TRUE);
++  }
++
++  /**
++   * Tests that storeResponse method works in general without any data manipulations.
++   */
++  public function testSimpleInvocation() {
++    $request = new Request();
++    $response = new CacheableResponse();
++
++    // Expect backend cache to be set.
++    $this->cache->expects($this->once())->method('set');
++
++    $this->assertTrue($this->method->invoke($this->pageCache, $request, $response));
++  }
++
++  /**
++   * Tests handling of NULL value returned from Response::getExpires.
++   */
++  public function testResponseWithoutExpiresHeader() {
++    $request = new Request();
++
++    $response = $this->getMock(CacheableResponse::class, ['getExpires']);
++    $response->expects($this->any())
++      ->method('getExpires')
++      ->will($this->onConsecutiveCalls(
++        NULL,
++        new \DateTime('-1 day'),
++        new \DateTime(),
++        new \DateTime('1 day')
++      ));
++
++    // Expect backend cache to be set.
++    $this->cache->expects($this->exactly(4))->method('set');
++
++    for ($i = 0; $i < 4; $i++) {
++      $this->assertTrue($this->method->invoke($this->pageCache, $request, $response));
++    }
++  }
++
++}

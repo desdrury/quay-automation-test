@@ -1,0 +1,365 @@
+diff --git core/modules/media/config/install/core.entity_form_display.media.file.default.yml core/modules/media/config/install/core.entity_form_display.media.file.default.yml
+deleted file mode 100644
+index 50d57bc22a..0000000000
+--- core/modules/media/config/install/core.entity_form_display.media.file.default.yml
++++ /dev/null
+@@ -1,51 +0,0 @@
+-langcode: en
+-status: true
+-dependencies:
+-  config:
+-    - field.field.media.file.field_media_file
+-    - media.type.file
+-  module:
+-    - file
+-id: media.file.default
+-targetEntityType: media
+-bundle: file
+-mode: default
+-content:
+-  created:
+-    type: datetime_timestamp
+-    weight: 10
+-    region: content
+-    settings: {  }
+-    third_party_settings: {  }
+-  field_media_file:
+-    settings:
+-      progress_indicator: throbber
+-    third_party_settings: {  }
+-    type: file_generic
+-    weight: 26
+-    region: content
+-  name:
+-    type: string_textfield
+-    weight: -5
+-    region: content
+-    settings:
+-      size: 60
+-      placeholder: ''
+-    third_party_settings: {  }
+-  status:
+-    type: boolean_checkbox
+-    settings:
+-      display_label: true
+-    weight: 100
+-    region: content
+-    third_party_settings: {  }
+-  uid:
+-    type: entity_reference_autocomplete
+-    weight: 5
+-    settings:
+-      match_operator: CONTAINS
+-      size: 60
+-      placeholder: ''
+-    region: content
+-    third_party_settings: {  }
+-hidden: {  }
+diff --git core/modules/media/config/install/core.entity_form_display.media.image.default.yml core/modules/media/config/install/core.entity_form_display.media.image.default.yml
+deleted file mode 100644
+index 6f2323b778..0000000000
+--- core/modules/media/config/install/core.entity_form_display.media.image.default.yml
++++ /dev/null
+@@ -1,53 +0,0 @@
+-langcode: en
+-status: true
+-dependencies:
+-  config:
+-    - field.field.media.image.field_media_image
+-    - image.style.thumbnail
+-    - media.type.image
+-  module:
+-    - image
+-id: media.image.default
+-targetEntityType: media
+-bundle: image
+-mode: default
+-content:
+-  created:
+-    type: datetime_timestamp
+-    weight: 10
+-    region: content
+-    settings: {  }
+-    third_party_settings: {  }
+-  field_media_image:
+-    settings:
+-      progress_indicator: throbber
+-      preview_image_style: thumbnail
+-    third_party_settings: {  }
+-    type: image_image
+-    weight: 26
+-    region: content
+-  name:
+-    type: string_textfield
+-    weight: -5
+-    region: content
+-    settings:
+-      size: 60
+-      placeholder: ''
+-    third_party_settings: {  }
+-  status:
+-    type: boolean_checkbox
+-    settings:
+-      display_label: true
+-    weight: 100
+-    region: content
+-    third_party_settings: {  }
+-  uid:
+-    type: entity_reference_autocomplete
+-    weight: 5
+-    settings:
+-      match_operator: CONTAINS
+-      size: 60
+-      placeholder: ''
+-    region: content
+-    third_party_settings: {  }
+-hidden: {  }
+diff --git core/modules/media/config/install/core.entity_view_display.media.file.default.yml core/modules/media/config/install/core.entity_view_display.media.file.default.yml
+deleted file mode 100644
+index 933b295079..0000000000
+--- core/modules/media/config/install/core.entity_view_display.media.file.default.yml
++++ /dev/null
+@@ -1,24 +0,0 @@
+-langcode: en
+-status: true
+-dependencies:
+-  config:
+-    - field.field.media.file.field_media_file
+-    - media.type.file
+-  module:
+-    - file
+-id: media.file.default
+-targetEntityType: media
+-bundle: file
+-mode: default
+-content:
+-  field_media_file:
+-    label: visually_hidden
+-    settings: {  }
+-    third_party_settings: {  }
+-    type: file_default
+-    weight: 0
+-    region: content
+-hidden:
+-  created: true
+-  thumbnail: true
+-  uid: true
+diff --git core/modules/media/config/install/core.entity_view_display.media.image.default.yml core/modules/media/config/install/core.entity_view_display.media.image.default.yml
+deleted file mode 100644
+index fe01f37b6f..0000000000
+--- core/modules/media/config/install/core.entity_view_display.media.image.default.yml
++++ /dev/null
+@@ -1,27 +0,0 @@
+-langcode: en
+-status: true
+-dependencies:
+-  config:
+-    - field.field.media.image.field_media_image
+-    - image.style.medium
+-    - media.type.image
+-  module:
+-    - image
+-id: media.image.default
+-targetEntityType: media
+-bundle: image
+-mode: default
+-content:
+-  field_media_image:
+-    label: visually_hidden
+-    settings:
+-      image_style: medium
+-      image_link: file
+-    third_party_settings: {  }
+-    type: image
+-    weight: 0
+-    region: content
+-hidden:
+-  created: true
+-  thumbnail: true
+-  uid: true
+diff --git core/modules/media/config/install/field.field.media.file.field_media_file.yml core/modules/media/config/install/field.field.media.file.field_media_file.yml
+deleted file mode 100644
+index 00c16ec077..0000000000
+--- core/modules/media/config/install/field.field.media.file.field_media_file.yml
++++ /dev/null
+@@ -1,29 +0,0 @@
+-langcode: en
+-status: true
+-dependencies:
+-  config:
+-    - field.storage.media.field_media_file
+-    - media.type.file
+-  enforced:
+-    module:
+-      - media
+-  module:
+-    - file
+-id: media.file.field_media_file
+-field_name: field_media_file
+-entity_type: media
+-bundle: file
+-label: File
+-description: ''
+-required: true
+-translatable: true
+-default_value: {  }
+-default_value_callback: ''
+-settings:
+-  file_directory: '[date:custom:Y]-[date:custom:m]'
+-  file_extensions: 'txt rtf doc docx ppt pptx xls xlsx pdf odf odg odp ods odt fodt fods fodp fodg key numbers pages'
+-  max_filesize: ''
+-  handler: 'default:file'
+-  handler_settings: {  }
+-  description_field: false
+-field_type: file
+diff --git core/modules/media/config/install/field.field.media.image.field_media_image.yml core/modules/media/config/install/field.field.media.image.field_media_image.yml
+deleted file mode 100644
+index f6a62cc595..0000000000
+--- core/modules/media/config/install/field.field.media.image.field_media_image.yml
++++ /dev/null
+@@ -1,40 +0,0 @@
+-langcode: en
+-status: true
+-dependencies:
+-  config:
+-    - field.storage.media.field_media_image
+-    - media.type.image
+-  enforced:
+-    module:
+-      - media
+-  module:
+-    - image
+-id: media.image.field_media_image
+-field_name: field_media_image
+-entity_type: media
+-bundle: image
+-label: Image
+-description: ''
+-required: true
+-translatable: true
+-default_value: {  }
+-default_value_callback: ''
+-settings:
+-  alt_field: true
+-  alt_field_required: true
+-  title_field: false
+-  title_field_required: false
+-  max_resolution: ''
+-  min_resolution: ''
+-  default_image:
+-    uuid: null
+-    alt: ''
+-    title: ''
+-    width: null
+-    height: null
+-  file_directory: '[date:custom:Y]-[date:custom:m]'
+-  file_extensions: 'png gif jpg jpeg'
+-  max_filesize: ''
+-  handler: 'default:file'
+-  handler_settings: {  }
+-field_type: image
+diff --git core/modules/media/config/install/field.storage.media.field_media_file.yml core/modules/media/config/install/field.storage.media.field_media_file.yml
+deleted file mode 100644
+index 1fa8af99a6..0000000000
+--- core/modules/media/config/install/field.storage.media.field_media_file.yml
++++ /dev/null
+@@ -1,25 +0,0 @@
+-langcode: en
+-status: true
+-dependencies:
+-  enforced:
+-    module:
+-      - media
+-  module:
+-    - file
+-    - media
+-id: media.field_media_file
+-field_name: field_media_file
+-entity_type: media
+-type: file
+-settings:
+-  uri_scheme: public
+-  target_type: file
+-  display_field: false
+-  display_default: false
+-module: file
+-locked: false
+-cardinality: 1
+-translatable: true
+-indexes: {  }
+-persist_with_no_fields: false
+-custom_storage: false
+diff --git core/modules/media/config/install/field.storage.media.field_media_image.yml core/modules/media/config/install/field.storage.media.field_media_image.yml
+deleted file mode 100644
+index 231200d59b..0000000000
+--- core/modules/media/config/install/field.storage.media.field_media_image.yml
++++ /dev/null
+@@ -1,32 +0,0 @@
+-langcode: en
+-status: true
+-dependencies:
+-  enforced:
+-    module:
+-      - media
+-  module:
+-    - file
+-    - image
+-    - media
+-id: media.field_media_image
+-field_name: field_media_image
+-entity_type: media
+-type: image
+-settings:
+-  default_image:
+-    uuid: null
+-    alt: ''
+-    title: ''
+-    width: null
+-    height: null
+-  target_type: file
+-  display_field: false
+-  display_default: false
+-  uri_scheme: public
+-module: image
+-locked: false
+-cardinality: 1
+-translatable: true
+-indexes: {  }
+-persist_with_no_fields: false
+-custom_storage: false
+diff --git core/modules/media/config/install/media.type.file.yml core/modules/media/config/install/media.type.file.yml
+deleted file mode 100644
+index a716fc1852..0000000000
+--- core/modules/media/config/install/media.type.file.yml
++++ /dev/null
+@@ -1,12 +0,0 @@
+-langcode: en
+-status: true
+-dependencies: {  }
+-id: file
+-label: File
+-description: "Use local files for reusable media."
+-source: file
+-queue_thumbnail_downloads: false
+-new_revision: true
+-source_configuration:
+-  source_field: field_media_file
+-field_map: {  }
+diff --git core/modules/media/config/install/media.type.image.yml core/modules/media/config/install/media.type.image.yml
+deleted file mode 100644
+index 9527f625fc..0000000000
+--- core/modules/media/config/install/media.type.image.yml
++++ /dev/null
+@@ -1,12 +0,0 @@
+-langcode: en
+-status: true
+-dependencies: {  }
+-id: image
+-label: Image
+-description: "Use local images for reusable media."
+-source: image
+-queue_thumbnail_downloads: false
+-new_revision: true
+-source_configuration:
+-  source_field: field_media_image
+-field_map: {  }
